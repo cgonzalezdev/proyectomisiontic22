@@ -7,6 +7,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Configuration of the server
 USE_RELOADER = True
+THREADED = True
 HOST = "0.0.0.0"
 DEBUG = True
 
