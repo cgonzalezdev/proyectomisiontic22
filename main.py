@@ -18,9 +18,12 @@ import base64
 
 from markupsafe import escape
 
-app = Flask(__name__) #creating the Flask class object   
+app = Flask(__name__) #creating the Flask class object 
+  
+app.config['SESSION_PERMANENT'] = True
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=5)
 
-app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = config.SECRET_KEY
 
 @app.route(urls.VIEW_LOGIN['r'], methods=urls.VIEW_LOGIN['m'])
