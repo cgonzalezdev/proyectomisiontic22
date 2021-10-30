@@ -17,13 +17,9 @@ import base64
 
 from markupsafe import escape
 
-from datetime import timedelta
-
 app = Flask(__name__) #creating the Flask class object 
   
-app.config['SESSION_PERMANENT'] = True
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=5)
+app.config['SESSION_TYPE'] = 'memcached'
 
 app.secret_key = config.SECRET_KEY
 
