@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% set count = namespace(value=1) %}
+{% set checkEmpty = namespace(value=0) %}
+
+{% for ele in elems %}
+
+    {% if count.value == 1 %}
+        <div class="columns is-centered"> <!-- Begin: Row -->
+    {% endif %}
+
+    <div class="column element" data-string="{{ ele[1] }}">      
+        <div class="card">       
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure class="image is-64x64">
+                    <img src="{{ ele[5] }}">
+                  </figure>
+                </div>
+                <div class="media-content">
+                  {% if Loggedin==True %}
+                  <a href="/producto/{{ ele[0] }}"><p class="title is-4">{{ ele[1] }}</p></a>  
+                  {% else %}
+                  <a href="/login"><p class="title is-4">{{ ele[1] }}</p></a>  
+                  {% endif %}                                  
+                  <p class="subtitle is-6">{{ ele[3] }} Pesos COP</p>
+                </div>
+              </div>          
+              <div class="content has-text-justified" style="position: relative !important;top: 20px !important;">
+                {{ ele[2] }}
+              </div>
+            </div>
+          </div>
+    </div>
+    {% set count.value = count.value + 1 %}
+    {% set checkEmpty.value = checkEmpty.value + 1 %}
+     
+    {% if loop.index%3==0 %}
+      </div> <!-- End: Row -->  
+      {% set count.value = 1 %} 
+    {% endif %}  
+
+{% endfor %} 
+
+{% if checkEmpty.value == 0 %}  
+  <div class="notification is-warning is-light">
+    <br><br><br>
+    <p class = "has-text-black has-text-centered">
+      <strong>
+        {% if rolID == 1 or rolID == 0 %}
+          Actualmente no se han ingresado productos, por favor contactar al Administrador del sitio web.
+        {% endif %}
+        {% if rolID == 2 or rolID == 3 %}
+          Debe añadir productos para que pueden ser visibles en el sitio web.
+        {% endif %}
+        <br><br>
+        <i style="color: #ffe08a !important;font-size: 48px !important;" class="fas fa-exclamation-triangle"></i>
+      </strong>
+    </p>    
+    <br><br><br>
+  </div>
+{% endif %}
+
+{% if rolID == 2 or rolID == 3 %}
+<a href="/producto/create" title="Añadir Producto" class="buttonFloating"> 
+  <i style="margin-top:22px !important;" class="fa fa-plus"></i>
+</a>
+{% endif %}
+
+{% endblock %}

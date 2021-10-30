@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registro - Vipshop Holdings</title>
+	
+	<link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	
+  </head>
+  <body>
+
+  <div class="section">
+    <div class="container">
+      <div class="media is-pulled-right">
+        <div class="media-content"><span class="has-text-center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+          <div class="field is-grouped">
+            <div class="control">              
+                <a href="/login" class="button is-success is-light"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;&nbsp; Acceso</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="title">Registrarse</div>
+      <div class="subtitle">Los campos marcados con (*) son obligatorios.</div>
+      <form id="register-form" action="/register" method="post" enctype="multipart/form-data" onsubmit="return formSubmitRegister();">
+        <div class="field">   
+		  <div class="columns row-one">
+            <div class="column">
+               <label class="label" for="username">Usuario: (*)</label>
+          <div class="control has-icons-left">
+				<input class="input" type="text" placeholder="Usuario..." name="username" required>
+				<span class="icon is-small is-left">
+                  <i class="fa fa-user"></i>
+                </span>
+		  </div>
+            </div>
+            <div class="column">
+              <label class="label" for="email">Email:</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Email..." name="email" onfocusout="ValidateEmailRegister(this);">             
+				<span class="icon is-small is-left">
+                  <i class='fas fa-envelope'></i>
+                </span>
+			 </div>
+       <label style="font-size: 0.8rem !important;color: #f14668 !important;" class="label" id="errorEmail"></label>
+            </div>
+          </div>		  
+		  <div class="columns">
+            <div class="column">
+              <label class="label" for="password">Contraseña: (*)</label>
+              <div class="control has-icons-left">
+                <input class="input" type="password" placeholder="Contraseña..." id="password" name="password" required>
+				<span class="icon is-small is-left">
+                  <i class="fa fa-lock"></i>
+                </span>
+			  </div>
+            </div>
+            <div class="column">
+              <label class="label" for="retypePassword">Confirmar Contraseña: (*)</label>
+              <div class="control has-icons-left">
+                <input class="input" type="password" placeholder="Confirmar Contraseña..." id="retypePassword" name="retypePassword" onfocusout="compareRetypePassword();" required>
+				<span class="icon is-small is-left">
+                  <i class="fa fa-lock"></i>
+                </span>
+			 </div>
+       <label style="font-size: 0.8rem !important;color: #f14668 !important;" class="label" id="errorRetypePassword"></label>
+            </div>
+          </div>
+          <div class="columns row-one">
+            <div class="column">
+              <label class="label" for="nombres">Nombres:</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Nombres..." name="nombres">
+				<span class="icon is-small is-left">
+                  <i class='fas fa-spell-check'></i>
+                </span>
+              </div>
+            </div>
+            <div class="column">
+              <label class="label" for="apellidos">Apellidos:</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Apellidos..." name="apellidos">
+				<span class="icon is-small is-left">
+                  <i class='fas fa-spell-check'></i>
+                </span>
+              </div>
+            </div>
+          </div>
+		  <div class="columns row-one">
+            <div class="column">
+              <label class="label" for="tipoDoc">Tipo de Documento:</label>
+              <div class="control">                
+					<div class="select is-normal">
+					  <select name="tipoDoc">
+					  <option value="" selected>Seleccion Tipo de Documento</option>
+						<option value="CC">CÉDULA DE CIUDADANÍA</option>
+						<option value="CE">CÉDULA EXTRAJERA</option>
+						<option value="DE">DOCUMENTO EXTRAJERO</option>
+						<option value="PA">PASAPORTE</option>
+						<option value="RC">REGISTRO CIVIL</option>
+						<option value="TI">TARJETA DE IDENTIDAD</option>
+					  </select>
+					</div>				
+              </div>
+            </div>
+            <div class="column">
+              <label class="label" for="numDoc">Numero Documento:</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Numero..." name="numDoc" onfocusout="ValidateNumberRegister(this, 'errorDocumento');">
+				<span class="icon is-small is-left">
+                  <i class='far fa-address-card'></i>
+                </span>
+              </div>
+            <label style="font-size: 0.8rem !important;color: #f14668 !important;" class="label" id="errorDocumento"></label>  
+            </div>
+          </div>
+		  <div class="columns row-one">
+            <div class="column">
+              <label class="label" for="telefono">Teléfono:</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Telefono..." name="telefono" onfocusout="ValidateNumberRegister(this, 'errorTelefono');">
+				<span class="icon is-small is-left">
+                  <i class='fas fa-phone'></i>
+                </span>
+              </div>
+              <label style="font-size: 0.8rem !important;color: #f14668 !important;" class="label" id="errorTelefono"></label>
+            </div>
+            <div class="column">
+              <label class="label" for="direccion">Dirección:</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Direccion..." name="direccion">
+				<span class="icon is-small is-left">
+                  <i class='fas fa-home'></i>
+                </span>
+              </div>
+            </div>
+          </div>  
+          <div class="columns row-one">
+            <div class="column">
+              <div class="control has-icons-left">    
+                  <div class="file is-link">
+                    <label class="file-label">
+                      <input type="file" class="imgUpload file-input" id="imgUpload" name="imgUpload" accept="image/*" />
+                        <span class="file-cta">
+                          <span class="file-icon"><i class="fa fa-upload"></i></span>
+                            <span class="file-label">
+                              Subir Imagen
+                            </span>
+                        </span>
+                        <span style="visibility: hidden;" class="file-name"></span>
+                    </label>
+                </div>
+              </div>
+              <label style="font-size: 0.8rem !important;color: #485fc7 !important;" class="label" id="maxFile">Maximo 100 KB <span style="font-size: 0.9rem !important;color: #f14668 !important;" id="sizeImageUpload"></span> </label>
+            </div>
+          </div>  
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-success is-medium" type="submit">REGISTRARSE</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      {% if error %}
+        <div class="toastMsg notification is-danger is-light">
+          <button class="btCloseToast delete" ></button>
+          <p class="has-text-centered has-text-danger-dark"> {{ error }} </p>
+        </div>
+      {% endif %}
+      {% if success %}
+      <div class="toastMsg notification is-success is-light">
+        <button class="btCloseToast delete" ></button>
+        <p class="has-text-centered has-text-success-dark"> {{ success }} </p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script src="/static/js/navbarMain.js"></script>
+<script src="/static/js/utils.js"></script>
+<script src="/static/js/validate.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $(".btCloseToast").click(function() {
+        $(".toastMsg").slideUp(2500).delay(400).fadeOut(400);
+      });
+        $(".toastMsg").delay(2500).slideUp(400).fadeOut(400);
+    });
+  </script>
+
+  </body>
+</html>

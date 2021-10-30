@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ pageName }} - Vipshop Holdings</title>
+	
+	  <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        
+  </head>
+  <body>
+
+<section class="section">
+  <div class="container">
+
+{% set count = namespace(value=0) %}
+{% for d in data %}
+{% set count.value = count.value + 1 %}
+<div class="card" style="width: 500px !important;">    
+  <div class="card-content">
+    <div class="media">
+      <div class="media-left">        
+          <i style="font-size: 48px;" class="fas fa-user-circle"></i>        
+      </div>
+      <div class="media-content">
+        <p class="title is-6">@{{ d[0] }}</p>
+        <p class="subtitle is-6">
+          <div style="cursor: pointer !important;" class="buttons are-small" title="{{ d[2] }} de 5 Estrellas">
+            <input type="hidden" id="calificacion_{{ loop.index }}" value="{{ d[2] }}" />
+            <button style="cursor: pointer !important;" disabled type="button" class="button is-white btStars_{{ loop.index }}"> <i class="fas fa-star"></i> </button>
+            <button style="cursor: pointer !important;" disabled type="button" class="button is-white btStars_{{ loop.index }}"> <i class="fas fa-star"></i> </button>
+            <button style="cursor: pointer !important;" disabled type="button" class="button is-white btStars_{{ loop.index }}"> <i class="fas fa-star"></i> </button>
+            <button style="cursor: pointer !important;" disabled type="button" class="button is-white btStars_{{ loop.index }}"> <i class="fas fa-star"></i> </button>
+            <button style="cursor: pointer !important;" disabled type="button" class="button is-white btStars_{{ loop.index }}"> <i class="fas fa-star"></i> </button>             
+          </div> 
+        </p>
+      </div>
+    </div>
+    <div class="content">
+      {{ d[3] }}
+    </div>
+  </div>
+</div>
+<hr style="margin-top: 2px; margin-bottom: 2px;">
+<br>
+{% endfor %}  
+
+{% if count.value == 0 %}
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-half">       
+          <p class = "has-text-black has-text-centered">
+            Este producto no tiene comentarios publicados. <br><br>
+            <i style="font-size: 64px !important;" class="fas fa-comment-slash"></i>
+          </p>
+        
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+</div>
+</section>
+
+<script>
+  $(document).ready(function(){
+    function setRatingStars() {
+      var cardContentSize = document.getElementsByClassName("card-content").length;  
+      for (var i=1;i <= cardContentSize;i++) {
+        var btStars = document.getElementsByClassName("btStars_"+i);  
+        var size = parseInt(document.getElementById("calificacion_"+i).value);       
+        for (var j=0;j < size;j++) {
+          btStars[j].style.color = "#F9A825";
+        }  
+      }       
+    }
+    setRatingStars();
+  });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="content-cal">      
+        <div class="product">          
+          <aside style="padding-top: 80px;"><strong> {{ nombre }}</strong></aside>          
+          <hr style="margin-top: 5px; margin-bottom: 5px;">
+          <aside><strong>Precio: {{ precio }} Pesos COP</strong></aside> 
+          <form class="box" action="/comentario/create" method="post">
+            <label for="comentario">Cuéntanos más del producto:</label>
+            <textarea class="textarea" placeholder="Maximo 2096 caracteres." name="comentario" maxlength="2096" rows="10" style="width: 100% !important;" autofocus></textarea>
+            <p class="calificacion">
+              <label for="calificacion">¿Cuántas estrellas le darias?:</label>
+                <input type="hidden" name="codigo" value="{{ codigo }}" />
+                <input type="hidden" id="calificacion" name="calificacion" value="" />
+                <div class="buttons are-medium">
+                  <button type="button" class="button is-white btStars" value="1" onclick="ratingStars(this);"> <i class="fas fa-star iconStar1"></i> </button>
+                  <button type="button" class="button is-white btStars" value="2" onclick="ratingStars(this);"> <i class="fas fa-star iconStar2"></i> </button>
+                  <button type="button" class="button is-white btStars" value="3" onclick="ratingStars(this);"> <i class="fas fa-star iconStar3"></i> </button>
+                  <button type="button" class="button is-white btStars" value="4" onclick="ratingStars(this);"> <i class="fas fa-star iconStar4"></i> </button>
+                  <button type="button" class="button is-white btStars" value="5" onclick="ratingStars(this);"> <i class="fas fa-star iconStar5"></i> </button>
+                </div>
+            </p>            
+            <hr style="margin-top: 5px; margin-bottom: 5px;">
+            <div class="buttons are-medium">
+            <button type="submit" class="button is-success" id="save">Guardar</button>
+          </form>
+            <button type="button" class="button is-danger" id="cancelar" onclick="javascript:location.href='/producto/{{ codigo }}';">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+  function ratingStars(elmnt) {
+    var btStarsLen = document.getElementsByClassName("btStars").length;
+    var btStars = document.getElementsByClassName("btStars");
+    for (var x=0;x < btStarsLen;x++) { btStars[x].style.color = "#363636"; }
+    for (var i=0;i < elmnt.value;i++) {
+      btStars[i].style.color = "#F9A825";
+    }
+    document.getElementById("calificacion").value = elmnt.value;
+  }
+</script>
+
+{% endblock %}

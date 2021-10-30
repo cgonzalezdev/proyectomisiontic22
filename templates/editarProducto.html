@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for ele in elems %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title has-text-centered">
+                Editar Producto
+            </h1>
+            <form id="formEdit" action="/producto/edit" method="post" enctype="multipart/form-data">
+                <div class="field">
+                    <label for="" class="label">Codigo (*)</label>
+                    <div>
+                        <input style="cursor: not-allowed !important;background: #EEEEEE !important;" class="input" type="text" id="codigo" name="codigo" value="{{ ele[0] }}" readonly>
+                        <input type="hidden" id="codigoProd" value="{{ ele[0] }}" />
+                    </div>
+                </div>                
+                
+                <div>
+                    <label for="" class="label">Nombre (*)</label>
+                    <div>
+                        <input class="input" id="nombre" name="nombre" type="text" value="{{ ele[1] }}"">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="" class="label">Descripcion</label>
+                    <div>
+                        <textarea class="textarea" maxlength="1024" id="descripcion" name="descripcion">{{ ele[2] }}</textarea>
+                    </div>
+                </div>   
+
+                <div>
+                    <label for="" class="label">Precio (*)</label>
+                    <div>
+                        <input class="input" id="precio" name="precio" type="text" value="{{ ele[3] }}">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="" class="label">Cantidad (*)</label>
+                    <div>
+                        <input class="input" id="cantidad" name="cantidad" type="number" value="{{ ele[4] }}">
+                    </div>
+                </div>
+                <br>
+
+                <div class="columns row-one">
+                    <div class="column">
+                      <div class="control has-icons-left">    
+                          <div class="file is-link">
+                            <label class="file-label">
+                              <input type="file" class="file-input" id="imagen" name="imagen" accept="image/*" />
+                                <span class="file-cta">
+                                  <span class="file-icon"><i class="fa fa-upload"></i></span>
+                                    <span class="file-label">
+                                      Subir Imagen
+                                    </span>
+                                </span>
+                                <span style="visibility: hidden;" class="file-name"></span>
+                            </label>
+                        </div>
+                      </div>
+                      <label style="font-size: 0.8rem !important;color: #485fc7 !important;" class="label" id="maxFile">Maximo 100 KB <span style="font-size: 0.9rem !important;color: #f14668 !important;" id="sizeImageUpload"></span> </label>
+                    </div>
+                  </div> 
+                  
+                <br>
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="button" id="btSend" class="button is-success is-medium">Guardar Cambios</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-danger is-light is-medium" type="button" onclick="javascript:location.href='/';" >Cancelar</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </section>
+{% endfor %} 
+
+<script>
+$("#btSend").click(function (event) {
+var codigoProd = parseInt(document.getElementById("codigoProd").value);    
+event.preventDefault();
+var form = $('#formEdit')[0];
+var data = new FormData(form);
+data.append("codigo",document.getElementById("codigo").value);
+data.append("nombre", document.getElementById("nombre").value);
+data.append("descripcion", document.getElementById('descripcion').textContent);
+data.append("precio", document.getElementById("precio").value);
+data.append("cantidad", document.getElementById("cantidad").value);
+data.append("imagen", document.getElementById("imagen").value);
+$.ajax({
+    type: "POST",
+    enctype: 'multipart/form-data',
+    url: "/producto/edit",
+    data: data,
+    processData: false,
+    contentType: false,
+    cache: false,
+    timeout: 600000,
+    success: function (data) {
+        alert("El producto fue editado exitosamente.");
+        location.href = "/producto/"+codigoProd;
+    },
+    error: function (e) {
+        alert("ERROR: " + result);  
+    }
+});
+});
+</script>
+
+{% endblock %}

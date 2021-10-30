@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ pageName }} - Vipshop Holdings</title>
+	
+    <!--  https://fontawesome.com/v5.15/icons -->
+	  <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+
+    <!--  https://datatables.net/examples/styling/bulma.html -->
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bulma.min.js"></script>
+        
+  </head>
+  <body>
+
+    <div class="container is-fluid">
+
+          {% include 'navbar.html' %}
+
+      <div class="columns">
+        <div class="column is-full">          
+            <div class="column is-11">
+                <h2>Bienvenido, {% if userID %} {{ userID }} {% else %} Invitado {% endif %} {% if rolID == 2 %} <strong>[Administrador]</strong> {% endif %} {% if rolID == 3 %} <strong>[SuperAdministrador]</strong> {% endif %}</h2>
+            </div> 
+        </div>
+      </div> 
+
+      {% block content %}
+      {% endblock %}
+
+    </div> 
+
+    {% if error %}
+        <div id="toastMsg" class="toastMsg notification is-danger is-light">
+          <button class="btCloseToast delete" ></button>
+          <p class="has-text-centered has-text-danger-dark"> {{ error }} </p>
+        </div>
+    {% endif %}  
+
+    {% if success %}
+        <div id="toastMsg" class="toastMsg notification is-success is-light">
+          <button class="btCloseToast delete" ></button>
+          <p class="has-text-centered has-text-success-dark"> {{ success }} </p>
+        </div>
+    {% endif %}  
+
+<footer class="footer">
+    <div class="content has-text-centered">
+      <p>          
+        Copyright &copy; <script>document.write(new Date().getFullYear())</script> MisiónTIC2022 - Todos los derechos reservados <br>
+        <a class="button is-ghost modal-button" id="clickModalPPD" data-target="#modalPPD" href="javascript:void(0);">Política de Protección de Datos</a>
+      </p>
+    </div>
+</footer>
+
+{% include 'politicaProteccionDatos.html' %}
+
+<script src="/static/js/navbarMain.js"></script>
+<script src="/static/js/utils.js"></script>
+<script src="/static/js/validate.js"></script>
+
+<script>
+$(document).ready(function() {
+  $('.table').DataTable( {
+	  "lengthMenu": [[10, 25, 50, 100, 250, 500, 1000, 1500, 2000, -1], [10, 25, 50, 100, 250, 500, 1000, 1500, 2000, "All"]],
+		"iDisplayLength": 10,	  
+        "language": {
+             "url": "./static/js/datatables_I18N/ES.json"
+        }       
+   }); 
+ });
+</script>
+
+<script>
+    $(document).ready(function() {
+      $(".btCloseToast ").click(function() {
+        $(".toastMsg").slideUp(2500).delay(400).fadeOut(400);
+      });
+        $(".toastMsg").delay(2500).slideUp(400).fadeOut(400);
+    });
+</script>
+
+{% if searchProduct %}
+<script>
+  $(document).ready(function() {
+  document.getElementById("searchProduct").innerText = "";
+  $("#searchProduct").on("keyup", function() {
+    var input = $(this).val().toUpperCase();
+  
+    $(".element").each(function() {
+      if ($(this).data("string").toUpperCase().indexOf(input) < 0) {
+        $(this).hide();
+      } else {
+        $(this).show();
+      }
+    })
+  });
+  });
+</script>
+{% endif %} 
+
+</body>
+</html>

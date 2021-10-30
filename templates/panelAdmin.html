@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ pageName }} - Vipshop Holdings</title>
+	
+	  <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+        
+  </head>
+  <body>
+
+<section class="section">
+<div class="container">
+      <div class="columns is-centered is-mobile">
+        <div class="column is-two-fifths">
+          
+          <div class="notification is-warning is-light">  
+            <p class="is-size-3 has-text-centered"><i style="font-size: 1.0em !important;" class="fas fa-user-shield"></i> ACCESO ADMIN.</p>
+            <br><br>
+          <form class="box" action="/panelAdmin" method="post">
+            <input type="hidden" name="token" value="{{ TokenCSRF }}" />
+            <div class="field">              
+              <div class="control has-icons-left">
+                <input name="username" type="text" placeholder="Usuario..." class="input" required>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-user"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control has-icons-left">
+                <input name="password" type="password" placeholder="Contraseña..." class="input" required>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-lock"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+            <div class="buttons is-centered">
+              <button class="button are-medium is-success"><i class="fas fa-sign-in-alt"></i>&nbsp; INGRESAR</button>  
+            </div>
+            </div>
+          </form>
+          <p class="is-size-5 has-text-centered is-italic"> <a class="button is-text" href="/">Regresar al inicio</a> </p>
+          
+        </div>
+
+        {% if error %}
+        <div id="toastMsg" class="toastMsg notification is-danger is-light">
+          <button class="btCloseToast delete" ></button>
+          <p class="has-text-centered has-text-danger-dark"> {{ error }} </p>
+        </div>
+        {% endif %}
+        </div>
+      </div>
+</div>
+</section>
+
+<script>
+  $(document).ready(function() {
+    $(".btCloseToast ").click(function() {
+      $(".toastMsg").slideUp(2500).delay(400).fadeOut(400);
+    });
+      $(".toastMsg").delay(2500).slideUp(400).fadeOut(400);
+  });
+</script>
+
+</body>
+</html>

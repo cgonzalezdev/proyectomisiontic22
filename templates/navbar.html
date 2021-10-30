@@ -1,0 +1,133 @@
+<nav style="border-bottom: 1px solid #363636 !important;" class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="javascript:void(0);">
+      <img src="/static/images/logo.png" width="auto" height="auto">
+    </a>
+
+    <a role="button" class="navbar-burger burger" data-target="navbarBasicExample">
+      <span></span>
+      <span></span>
+      <span></span>
+    </a>
+  </div>
+
+{% if searchProduct %}
+<!-- Search bar -->
+<div class="dropdown is-active pt-3">
+  <div class="dropdown-trigger">
+      <div class="field">
+          <p class="control is-expanded has-icons-right">
+              <input class="input" type="search" id="searchProduct" placeholder="¿Qué está buscando?"/>
+              <span class="icon is-small is-right">
+                  <!-- Search icon -->
+                  <i class="fas fa-search">                      
+                  </i>
+              </span>
+          </p>
+      </div>
+  </div>
+  </div>
+  {% endif %}
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+
+      <a class="navbar-item" href="/">
+        <i class="fas fa-tags"></i>&nbsp; Productos
+      </a>
+
+      {% if rolID == 2 or rolID == 3 %}
+      <a class="navbar-item" href="/producto/create">
+        <i class="fas fa-plus-square"></i>&nbsp; Agregar Producto
+      </a>
+      {% endif %}
+
+      {% if Loggedin==True %} 
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          Más...
+        </a>
+        <div class="navbar-dropdown"> 
+          {% if rolID == 1 %}                   
+          <a class="navbar-item" href="/misComentarios">
+            <i class="fas fa-comment-dots"></i>&nbsp; Mis Comentarios
+          </a>   
+          {% endif %}
+          {% if rolID == 2 or rolID == 3 %} 
+          <a class="navbar-item" href="/allComentarios">
+            <i class="fas fa-comments"></i>&nbsp; Listar Comentarios
+          </a> 
+          {% endif %}   
+          {% if rolID == 2 or rolID == 3 %} 
+          <hr class="navbar-divider">
+          <a class="navbar-item" href="/listUsers">
+            <i class="fas fa-users"></i>&nbsp; Usuarios
+          </a>
+          {% endif %} 
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <div class="navbar-end"> 
+     
+      <div class="navbar-item">
+        <div class="buttons">
+          {% if rolID == 1 %}
+          <a class="button is-light" href="/wishlist/list" title="Ver Lista de Deseos">
+            <i id="WishList" style="color: #f14668 !important;font-size: 18px !important;" class="fas fa-heart"></i>
+          </a>
+          {% endif %}
+          {% if Loggedin==False %}
+          <a class="button is-warning" href="/register">
+            <strong><i class="fas fa-user-edit"></i>&nbsp; Registrarse</strong>
+          </a>
+          <a style="color: #000 !important;font-weight: bold !important;" class="button is-primary" href="/login">
+            <i class="fas fa-sign-in-alt"></i>&nbsp; Ingresar
+          </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="navbar-item">        
+
+        {% if Loggedin==True %}
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">            
+            {% if Loggedin==True %}      
+             <img src="{{ photo }}" />    
+            {% else %}   
+             <i class='fas fa-user-circle' style='font-size:24px'></i>    
+            {% endif %}
+          </a>  
+          <div class="navbar-dropdown">
+            {% if rolID == 1 %}
+            <a class="navbar-item" href="/myProfile">
+              <i class='fas fa-address-book'></i>&nbsp; Mi Perfil
+            </a>
+            {% endif %}
+            {% if rolID == 1 %}
+            <a class="navbar-item" href="/changePasswd">
+              <i class="fas fa-key"></i>&nbsp; Cambiar Contraseña
+            </a>
+            {% endif %}
+            <hr class="navbar-divider">
+            <a class="navbar-item" href="{{ url_for('logout') }}">
+              <i class="fas fa-sign-out-alt"></i>&nbsp; Cerrar Sesión
+            </a>
+          </div>
+        </div> 
+        {% endif %}      
+
+        {% if Loggedin==True %} 
+        <div class="buttons">          
+          <a class="button is-danger" href="{{ url_for('logout') }}">
+            <i class="fas fa-sign-out-alt"></i>&nbsp; Salir
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

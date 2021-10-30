@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for ele in elems %}
+            <div class="section">
+                <div class="container">                  
+                  <div class="title">Mi Perfil</div>
+                  <form id="formEdit" action="/myProfile" method="post" enctype="multipart/form-data">
+                    <div class="field">   
+                      <div class="columns row-one">
+                        <div class="column">
+                           <label class="label" for="username">Usuario: (*)</label>
+                      <div class="control has-icons-left">
+                        <input style="cursor: not-allowed !important;background: #EEEEEE !important;" class="input" type="text"  value="{{ ele[0] }}" readonly>
+                            <span class="icon is-small is-left">
+                              <i class="fa fa-user"></i>
+                            </span>
+                      </div>
+                        </div>
+                        <div class="column">
+                          <label class="label" for="email">Email:</label>
+                          <div class="control has-icons-left">
+                            <input class="input" type="text" id="email" name="email" value="{{ ele[6] }}">             
+                            <span class="icon is-small is-left">
+                              <i class='fas fa-envelope'></i>
+                            </span>
+                         </div>                   
+                        </div>
+                      </div>
+                      <div class="columns row-one">
+                        <div class="column">
+                          <label class="label" for="nombres">Nombres:</label>
+                          <div class="control has-icons-left">
+                            <input class="input" type="text" id="nombres" name="nombres" value="{{ ele[1] }}">
+                            <span class="icon is-small is-left">
+                              <i class='fas fa-spell-check'></i>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="column">
+                          <label class="label" for="apellidos">Apellidos:</label>
+                          <div class="control has-icons-left">
+                            <input class="input" type="text" id="apellidos" name="apellidos" value="{{ ele[2] }}">
+                            <span class="icon is-small is-left">
+                              <i class='fas fa-spell-check'></i>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="columns row-one">
+                        <div class="column">
+                          <label class="label" for="tipoDoc">Tipo de Documento:</label>
+                          <div class="control">                
+                                <div class="select is-normal">  
+                                  <select id="tipoDoc" name="tipoDoc">
+                                    <option value="CC" {% if ele[3]=="CC" %} selected {% endif %}>CÉDULA DE CIUDADANÍA</option>
+                                    <option value="CE" {% if ele[3]=="CE" %} selected {% endif %}>CÉDULA EXTRAJERA</option>
+                                    <option value="DE" {% if ele[3]=="DE" %} selected {% endif %}>DOCUMENTO EXTRAJERO</option>
+                                    <option value="PA" {% if ele[3]=="PA" %} selected {% endif %}>PASAPORTE</option>
+                                    <option value="RC" {% if ele[3]=="RC" %} selected {% endif %}>REGISTRO CIVIL</option>
+                                    <option value="TI" {% if ele[3]=="TI" %} selected {% endif %}>TARJETA DE IDENTIDAD</option>
+                                  </select>
+                                </div>				
+                          </div>
+                        </div>
+                        <div class="column">
+                          <label class="label" for="numDoc">Numero Documento:</label>
+                          <div class="control has-icons-left">
+                            <input class="input" type="text"  id="numDoc" name="numDoc" value="{{ ele[4] }}">
+                            <span class="icon is-small is-left">
+                              <i class='far fa-address-card'></i>
+                            </span>
+                          </div>                         
+                        </div>
+                      </div>
+                      <div class="columns row-one">
+                        <div class="column">
+                          <label class="label" for="telefono">Teléfono:</label>
+                          <div class="control has-icons-left">
+                            <input class="input" type="text" id="telefono" name="telefono" value="{{ ele[5] }}">
+                            <span class="icon is-small is-left">
+                              <i class='fas fa-phone'></i>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="column">
+                          <label class="label" for="direccion">Dirección:</label>
+                          <div class="control has-icons-left">
+                            <input class="input" type="text" id="direccion" name="direccion" value="{{ ele[7] }}">
+                            <span class="icon is-small is-left">
+                              <i class='fas fa-home'></i>
+                            </span>
+                          </div>
+                        </div>
+                      </div>  
+                      <div class="columns row-one"> 
+                        <div class="column">
+                          <div class="control has-icons-left">    
+                              <div class="file is-link">
+                                <label class="file-label">
+                                  <input type="file" class="imgUpload file-input" id="imgUpload" name="imgUpload" accept="image/*" />
+                                    <span class="file-cta">
+                                      <span class="file-icon"><i class="fa fa-upload"></i></span>
+                                        <span class="file-label">
+                                          Subir Imagen
+                                        </span>
+                                    </span>
+                                    <span style="visibility: hidden;" class="file-name"></span>
+                                </label>
+                            </div>
+                          </div>
+                          <label style="font-size: 0.8rem !important;color: #485fc7 !important;" class="label" id="maxFile">Maximo 100 KB <span style="font-size: 0.9rem !important;color: #f14668 !important;" id="sizeImageUpload"></span> </label>
+                        </div>
+                      </div>  
+                      <div class="field is-grouped">
+                        <div class="control">
+                          <button type="button" id="btSend" class="button is-success is-medium">Guardar Cambios</button>
+                          <button class="button is-danger is-light is-medium" type="button" onclick="javascript:location.href='/';" >Cancelar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>                  
+                </div>
+              </div>
+{% endfor %} 
+
+<script>
+  $("#btSend").click(function (event) {   
+  event.preventDefault();
+  var form = $('#formEdit')[0];
+  var data = new FormData(form);
+  data.append("email",document.getElementById("email").value);
+  data.append("nombres", document.getElementById("nombres").value);
+  data.append("apellidos", document.getElementById('apellidos').textContent);
+  data.append("tipoDoc", document.getElementById("tipoDoc").value);
+  data.append("numDoc", document.getElementById("numDoc").value);  
+  data.append("telefono", document.getElementById("telefono").value);
+  data.append("direccion", document.getElementById("direccion").value);
+  data.append("imgUpload", document.getElementById("imgUpload").value);
+  $.ajax({
+      type: "POST",
+      enctype: 'multipart/form-data',
+      url: "/myProfile",
+      data: data,
+      processData: false,
+      contentType: false,
+      cache: false,
+      timeout: 600000,
+      success: function (data) {
+          alert("La información actualizada con exito!");
+          location.href = "/myProfile";
+      },
+      error: function (e) {
+          alert("ERROR: " + result);  
+      }
+  });
+  });
+  </script>
+
+{% endblock %}

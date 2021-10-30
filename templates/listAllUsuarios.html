@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="section">
+  <div class="container">
+
+  <div class="columns is-mobile is-centered">     
+    <h3 class="title is-4"><i style="color: #00d1b2 !important;font-size: 18px !important;" class="fas fa-users"></i>&nbsp; Usuarios </h3>
+    <br>
+  </div>
+
+    <table class="table is-fullwidth">
+      <thead class="is-uppercase">
+        <tr>
+          <th>Nombre de Usuario</th>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Telefono</th>
+          <th>Email</th>
+          <th>Imagen</th>
+          {% if rolID == 3 %} <th>Eliminar</th> {% endif %}
+        </tr>
+      </thead>
+      <tbody>  
+{% set count = namespace(value=0) %}
+{% for d in data %}
+{% set count.value = count.value + 1 %}
+    <tr>
+      <td> {{ d[0] }} </td>
+      <td> {{ d[3] }} </td>
+      <td> {{ d[4] }} </td>
+      <td> {{ d[7] }} </td>
+      <td> {{ d[8] }} </td>
+      <td> <img style="cursor: zoom-in !important;" onmouseover="bigImg(this)" onmouseout="normalImg(this)" id="img{{ loop.index }}" border="0" class="image is-48x48" src="{{ d[10] }}" /> </td>         
+      {% if rolID == 3 %}
+      <td> <button class="button is-white is-small" type="button" onclick="javascript:makeDELETErequest('{{ d[0] }}');"><i style="color: #f14668 !important;font-size: 16px !important;" class="far fa-trash-alt"></i>&nbsp;</button> </td>
+      {% endif %}
+    </tr>
+    {% if loop.index == 1 %}
+    <input type="hidden" id="userID" value="{{ userID }}">
+    <input type="hidden" id="codigo" value="{{ d[1] }}">
+    {% endif %}
+
+{% endfor %}  
+</tbody>
+</table>
+
+{% if count.value == 0 %}
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-half">       
+          <p class = "has-text-black has-text-centered">
+            Su lista de comentarios esta vacia, por favor realizar un comentario a un producto.<br><br>
+          <i style="font-size: 64px !important;" class="fas fa-magic"></i>
+          </p>        
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+</div>
+</section>
+
+<script>
+
+function bigImg(x) {
+  $("#"+x.id+":last").removeClass("is-48x48").addClass("is-128x128");  
+}
+function normalImg(x) {
+  $("#"+x.id+":last").removeClass("is-128x128").addClass("is-48x48");
+}
+
+function makeDELETErequest(User) {
+    var URL = "/user/delete/" + User;
+  $.ajax({
+    url: URL,
+    type: 'GET',
+    success: function (result) {
+      console.log(result);
+      console.log("El usuario '"+User+"' fue eliminado.");
+      alert("El usuario '"+User+"' fue eliminado.");
+      location.href = "/listUsers";
+    }
+  });
+};
+
+  $(document).ready(function(){
+    const formatterPeso = new Intl.NumberFormat('es-CO', {
+       style: 'currency',
+       currency: 'COP',
+       minimumFractionDigits: 0
+     })
+    function setPriceCOP() {     
+      var priceSize = document.getElementsByClassName("price").length;  
+      for (var i=1;i <= priceSize;i++) {
+        let valuePrice = parseInt(document.getElementById("price_"+i).innerHTML);
+        document.getElementById("price_"+i).innerHTML = formatterPeso.format(valuePrice);         
+      }       
+    }
+    setPriceCOP();
+  });
+</script>
+
+{% endblock %}

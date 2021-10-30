@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="columns">
+    <div class="column">
+        
+      <div class="columns is-mobile">
+        <div class="column">
+            <img class="image" src="{{ imagen  }}" />                    
+        </div>
+        <div class="column">                
+                <p class="is-uppercase is-size-4">{{ nombre }}</p>                 
+                <br>
+                <strong class="is-size-5">Descripcion:</strong>
+                <p id="productDescription" class="has-text-justified is-size-5">
+                    {{ descripcion }}
+                </p>
+                <br>
+                <strong id="priceValue" class="is-uppercase is-size-5">Precio: <span class="is-size-4 has-text-weight-normal">{{ precio }} Pesos COP</span></strong>    
+                <br><br>
+            <div class="buttons" >
+                <div class="field is-grouped is-grouped-multiline pr-5">
+                    <div class="control">
+                      <div class="tags has-addons">
+                        <span class="tag is-dark">Codigo Producto #</span>
+                        <span class="tag is-info">{{ codigo }}</span>
+                        <input type="hidden" id="codigoProd" value="{{ codigo }}" />
+                      </div>
+                    </div> 
+                </div>
+                <div class="field is-grouped is-grouped-multiline pr-5">
+                    <div class="control">
+                      <div class="tags has-addons">
+                        <span class="tag is-dark">Cantidad #</span>
+                        <span class="tag is-info">{{ cantidad }}</span>
+                      </div>
+                    </div> 
+                </div>
+                {% if rolID == 1 %} 
+                <div class="field is-grouped is-grouped-multiline pr-5">
+                  <div class="control">
+                    <div class="tags has-addons">
+                      {% if enableWL %}
+                      <span title="Agregar a Lista de Deseos" style="cursor: pointer !important;" id="wishList" class="tag is-white is-small"> <i id="iconWishList" style="font-size: 18px !important;" class="fas fa-heart"></i> </span>
+                      {% else %}
+                      <span title="Ya está Agregado a Lista de Deseos" class="tag is-white is-small"> <i id="iconWishList" style="color: #f14668 !important;font-size: 18px !important;" class="fas fa-heart"></i> </span>
+                      {% endif %}
+                    </div>
+                  </div> 
+              </div>
+              {% endif %} 
+            <br>
+            <br> 
+            </div>
+
+            <div class="tags"> 
+              <div style="cursor: pointer !important;" class="buttons are-small" title="{{ Prom }} de 5 Estrellas">
+                <input type="hidden" id="calificacion" value="{{ Prom }}" />                
+                <button style="cursor: pointer !important;" disabled type="button" class="button is-white btStars"> <i class="fas fa-star"></i> </button>
+                <button style="cursor: pointer !important;" disabled type="button" class="button is-white btStars"> <i class="fas fa-star"></i> </button>
+                <button style="cursor: pointer !important;" disabled type="button" class="button is-white btStars"> <i class="fas fa-star"></i> </button>
+                <button style="cursor: pointer !important;" disabled type="button" class="button is-white btStars"> <i class="fas fa-star"></i> </button>
+                <button style="cursor: pointer !important;" disabled type="button" class="button is-white btStars"> <i class="fas fa-star"></i> </button>
+                <a style="margin-bottom: 10px !important;" id="clickModalListComentarios" href="javascript:void(0);">Promedio {{ Prom }} de {{ Cant }} Comentarios</a> 
+              </div>              
+            </div>            
+
+            <div class="buttons">
+            {% if rolID == 1 %}                   
+            {% if enableComentario %}
+              <button class="button is-primary" onclick="location.href='/comentario/read/{{ nombre }}/{{ codigo }}/{{ precio }}'"><i class="far fa-comment-dots"></i>&nbsp; Comentar</button>
+              {% else %} 
+              <button disabled class="button is-info" type="button"><i class="fas fa-check"></i>&nbsp; Ya Comentó</button>
+            {% endif %}  
+            {% endif %}     
+            {% if rolID == 2 or rolID == 3 %}      
+              <button class="button is-warning" onclick="location.href='/producto/edit/{{ codigo }}'"><i class="fas fa-edit"></i>&nbsp; Editar</button>
+            {% endif %}
+            {% if rolID == 3 %} 
+              <button class="button is-danger" onclick="javascript:makeDELETErequest();"><i class="far fa-trash-alt"></i> &nbsp; Eliminar</button>
+              {% endif %}
+          </div>
+
+        </div>
+      </div>     
+
+    </div>  
+  </div>   
+  
+<div class="modal" id="modalListComentarios">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">&nbsp;&nbsp;&nbsp;</p>
+      <button id="deletemodalListComentarios" class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content  -->
+      <iframe style="overflow: scroll !important;width: 100% !important;height: 350px !important;" src="/comentario/{{ codigo }}" title="" scrolling="yes"></iframe>
+    </section>
+  </div>
+</div>
+
+{% if userID %}
+<input type="hidden" id="userID" value="{{ userID }}">
+{% endif %}
+
+<script>
+  $(document).ready(function(){
+    $("#wishList").click(function(){
+      makePOSTrequest();
+    });
+  });
+
+  function makeDELETErequest() {
+  $.ajax({
+    url: '/producto/delete/{{ codigo }}',
+    type: 'GET',
+    success: function (result) {
+      console.log("El producto #{{ codigo }} fue eliminado.");
+      alert("El producto #{{ codigo }} fue eliminado.");
+      location.href = "/";
+    }
+  });
+};
+function makePOSTrequest() {  
+  var codigoProd = parseInt(document.getElementById("codigoProd").value);
+  $.post("/wishlist/create",
+  {
+    username: document.getElementById("userID").value,
+    codigo: codigoProd
+  },
+  function(result, status){
+    if (result == "ok") {
+        document.getElementById("iconWishList").style.color = "#f14668";
+        document.getElementById("iconWishList").disabled = true;
+    } else {        
+        document.getElementById("iconWishList").style.color = "#0a0a0a";
+    }
+  });
+};
+</script>
+
+<script>
+$(document).ready(function(){
+  function setRatingStars() {
+    var size = parseInt(document.getElementById("calificacion").value);
+    var btStars = document.getElementsByClassName("btStars");    
+    for (var i=0;i < size;i++) {
+      btStars[i].style.color = "#F9A825";
+    }   
+  }
+  setRatingStars();
+});
+</script>
+
+{% endblock %}

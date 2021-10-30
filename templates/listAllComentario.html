@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="section">
+  <div class="container">
+
+  <div class="columns is-mobile is-centered">      
+    <h3 class="title is-4"><i style="color: #00d1b2 !important;font-size: 18px !important;" class="fas fa-comments"></i>&nbsp; Listado de Comentarios </h3>
+    <br>
+  </div>
+
+    <table class="table is-fullwidth">
+      <thead class="is-uppercase">
+        <tr>
+          <th>Usuario</th>
+          <th>Codigo Producto</th>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Imagen</th>
+          <th>Calificación</th>
+          <th>Comentario</th>
+          {% if rolID == 3 %}           
+          <th>Eliminar</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>  
+{% set count = namespace(value=0) %}
+{% for d in data %}
+{% set count.value = count.value + 1 %}
+    <tr>
+      <td> {{ d[0] }} </td>
+      <td> <a href="/producto/{{ d[1] }}">{{ d[1] }}</a> </td>
+      <td> {{ d[5] }} </td>
+      <td class="price" id="price_{{ loop.index }}"> {{ d[7] }} </td>
+      <td> <img style="cursor: zoom-in !important;" class="image is-48x48" src="{{ d[9] }}" /> </td>         
+      <td title="{{ d[2] }} de 5 estrellas"> {% for n in range(0,d[2]) %} <i style="color: #f9a825 !important;" class="fas fa-star"></i> {% endfor %} </td>
+      <td> {{ d[3] }} </td>
+      {% if rolID == 3 %} 
+      <td> <button class="button is-white is-small" type="button" onclick="javascript:makeDELETErequest('{{ d[1] }}','{{ d[0] }}');"><i style="color: #f14668 !important;font-size: 16px !important;" class="far fa-trash-alt"></i>&nbsp;</button> </td>  
+      {% endif %}
+    </tr>
+    {% if loop.index == 1 %}
+    <input type="hidden" id="userID" value="{{ userID }}">
+    <input type="hidden" id="codigo" value="{{ d[1] }}">
+    {% endif %}
+
+{% endfor %}  
+</tbody>
+</table>
+
+{% if count.value == 0 %}
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-half">       
+          <p class = "has-text-black has-text-centered">
+            Su lista de comentarios esta vacia, por favor realizar un comentario a un producto.<br><br>
+          <i style="font-size: 64px !important;" class="fas fa-magic"></i>
+          </p>        
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+</div>
+</section>
+
+<script>
+
+$(".image").mouseover(function(){
+  $(".image:last").removeClass("is-48x48").addClass("is-128x128");  
+});
+$(".image").mouseout(function(){
+  $(".image:last").removeClass("is-128x128").addClass("is-48x48"); 
+});
+
+  function makeDELETErequest(codProd, User) {
+    var URL = "/comentario/delete/"+ codProd +"/"+ User;
+  $.ajax({
+    url: URL,
+    type: 'GET',
+    success: function (result) {
+      console.log(result);
+      console.log("El comentario del producto con codigo #"+codProd+" fue eliminado de comentarios.");
+      alert("El comentario del producto con codigo #"+codProd+" fue eliminado de comentarios.");
+      location.href = "/allComentarios";
+    }
+  });
+};
+
+  $(document).ready(function(){
+    const formatterPeso = new Intl.NumberFormat('es-CO', {
+       style: 'currency',
+       currency: 'COP',
+       minimumFractionDigits: 0
+     })
+    function setPriceCOP() {     
+      var priceSize = document.getElementsByClassName("price").length;  
+      for (var i=1;i <= priceSize;i++) {
+        let valuePrice = parseInt(document.getElementById("price_"+i).innerHTML);
+        document.getElementById("price_"+i).innerHTML = formatterPeso.format(valuePrice);         
+      }       
+    }
+    setPriceCOP();
+  });
+</script>
+
+{% endblock %}
