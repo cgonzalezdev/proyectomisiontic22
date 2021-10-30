@@ -19,7 +19,7 @@ from markupsafe import escape
 
 app = Flask(__name__) #creating the Flask class object 
   
-app.config['SESSION_TYPE'] = 'memcached'
+app.config['SESSION_TYPE'] = 'filesystem'
 
 app.secret_key = config.SECRET_KEY
 
