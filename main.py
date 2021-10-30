@@ -1,4 +1,3 @@
-from locale import currency
 from flask import Flask, render_template, url_for, redirect, request, session
 from routes import urls
 
@@ -17,6 +16,8 @@ import comentarios
 import base64
 
 from markupsafe import escape
+
+from datetime import timedelta
 
 app = Flask(__name__) #creating the Flask class object 
   
